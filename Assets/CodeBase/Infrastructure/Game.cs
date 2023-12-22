@@ -6,18 +6,11 @@ namespace CodeBase.Infrastructure
 	public class Game
 	{
 		public static IInputService inputService;
+		public GameStateMachine StateMachine;
 
-		public Game()
+		public Game(ICoroutineRunner coroutineRunner, LoadCurtain curtain)
 		{
-			RegistorInputService();
-		}
-
-		private void RegistorInputService()
-		{
-			if (Application.isEditor)
-				inputService = new StandaloneInputService();
-			else
-				inputService = new MobileInputService();
+			StateMachine = new GameStateMachine(new SceneLoader(coroutineRunner), curtain);
 		}
 	}
 }
