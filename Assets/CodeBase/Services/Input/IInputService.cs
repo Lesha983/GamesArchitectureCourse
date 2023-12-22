@@ -1,5 +1,4 @@
-﻿using CodeBase.Services;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CodeBase.Services
 {
