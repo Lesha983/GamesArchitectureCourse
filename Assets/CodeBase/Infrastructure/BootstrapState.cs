@@ -32,13 +32,15 @@ namespace CodeBase.Infrastructure
 		}
 
 		private void EnterLoadLevel() =>
-			_stateMachine.Enter<LoadLevelState, string>("Main");
+			_stateMachine.Enter<LoadProgressState>();
 
 		private void RegisterServices()
 		{
 			_serices.RegisterSingle<IInputService>(InputService());
 			_serices.RegisterSingle<IAssetProvider>(new AssetProvider());
+			_serices.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
 			_serices.RegisterSingle<IGameFactory>(new GameFactory(_serices.Single<IAssetProvider>()));
+			_serices.RegisterSingle<ISaveLoadService>(new SaveLoadService(_serices.Single<IPersistentProgressService>(), _serices.Single<IGameFactory>()));
 		}
 
 		private static IInputService InputService()
