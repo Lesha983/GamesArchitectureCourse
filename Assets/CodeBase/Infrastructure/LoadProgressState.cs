@@ -1,9 +1,8 @@
-﻿using System;
-using CodeBase.Data;
+﻿using CodeBase.Data;
 
 namespace CodeBase.Infrastructure
 {
-	internal class LoadProgressState : IState
+	public class LoadProgressState : IState
 	{
 		private GameStateMachine _gameStateMachine;
 		private readonly IPersistentProgressService _progressService;
@@ -31,7 +30,15 @@ namespace CodeBase.Infrastructure
 			_progressService.Progress = _saveLoadService.LoadProgress() ?? NewProgress();
 		}
 
-		private PlayerProgress NewProgress() =>
-			new PlayerProgress("Main");
+		private PlayerProgress NewProgress()
+		{
+			var progress = new PlayerProgress("Main");
+			progress.HeroStats.Damage = 1f;
+			progress.HeroStats.DamageRadius = 0.5f;
+			progress.HeroState.MaxHP = 50f;
+			progress.HeroState.ResetHP();
+
+			return progress;
+		}
 	}
 }

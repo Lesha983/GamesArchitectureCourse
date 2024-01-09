@@ -27,7 +27,7 @@ namespace CodeBase.Infrastructure
 			return HeroGameObject;
 		}
 
-		public void CreateHud() =>
+		public GameObject CreateHud() =>
 			InstantiateRegistered(AssetPath.HudPath);
 
 		public void CleanUp()

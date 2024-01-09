@@ -14,7 +14,7 @@ namespace CodeBase.Infrastructure
 		event Action HeroCreated;
 
 		GameObject CreateHero(GameObject at);
-		void CreateHud();
+		GameObject CreateHud();
 		public void CleanUp();
 	}
 }
