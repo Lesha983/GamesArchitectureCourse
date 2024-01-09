@@ -281,7 +281,7 @@ public class SimpleInput : MonoBehaviour
 	public static bool GetButtonUp( string button )
 	{
 		Button buttonInput;
-		if( buttons.TryGetValue( button, out buttonInput ) )
+		if ( buttons.TryGetValue( button, out buttonInput ) )
 			return buttonInput.state == InputState.Released;
 
 		TrackButton( button );

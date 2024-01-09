@@ -7,26 +7,7 @@ namespace CodeBase.Data
 	public class PositionOnLevel
 	{
 		public string Level;
-		public Vector3Data Position
-		{
-			get
-			{
-				if (X == 0f && Y == 0f && Z == 0f)
-					return null;
-				return new Vector3Data(X, Y, Z);
-			}
-
-			set
-			{
-				X = value.X;
-				Y = value.Y;
-				Z = value.Z;
-			}
-		}
-
-		public float X;
-		public float Y;
-		public float Z;
+		public Vector3Data Position;
 
 		public PositionOnLevel(string initialLevel)
 		{

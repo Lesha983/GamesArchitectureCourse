@@ -1,5 +1,8 @@
 ﻿using System;
 using CodeBase.CameraLogic;
+using CodeBase.Hero;
+using CodeBase.Logic;
+using CodeBase.UI;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure
@@ -41,6 +44,7 @@ namespace CodeBase.Infrastructure
 		{
 			InitGameWorld();
 			InformProgressReaders();
+			InitHud(_gameFactory.HeroGameObject);
 
 			_stateMachine.Enter<GameLoopState>();
 		}
@@ -56,9 +60,15 @@ namespace CodeBase.Infrastructure
 			var initialPoint = GameObject.FindWithTag(_initialPointTag);
 			GameObject hero = _gameFactory.CreateHero(initialPoint);
 
-			_gameFactory.CreateHud();
-
 			CameraFollow(hero);
+		}
+
+		private void InitHud(GameObject hero)
+		{
+			var hud = _gameFactory.CreateHud();
+
+			hud.GetComponentInChildren<ActorUI>()
+				.Constract(hero.GetComponent<IHealth>());
 		}
 
 		private void CameraFollow(GameObject hero) =>
