@@ -10,6 +10,7 @@ namespace CodeBase.Infrastructure
 	public class LoadLevelState : IPayloadedState<string>
 	{
 		private const string _initialPointTag = "InitialPoint";
+		private const string _enemySpawnerTag = "EnemySpawner";
 		private GameStateMachine _stateMachine;
 		private SceneLoader _sceneLoader;
 		private readonly LoadCurtain _curtain;
@@ -57,10 +58,20 @@ namespace CodeBase.Infrastructure
 
 		private void InitGameWorld()
 		{
+			InitSpawners();
 			var initialPoint = GameObject.FindWithTag(_initialPointTag);
 			GameObject hero = _gameFactory.CreateHero(initialPoint);
 
 			CameraFollow(hero);
+		}
+
+		private void InitSpawners()
+		{
+			foreach (var spawnerObject in GameObject.FindGameObjectsWithTag(_enemySpawnerTag))
+			{
+				var spawner = spawnerObject.GetComponent<EnemySpawner>();
+				_gameFactory.Register(spawner);
+			}
 		}
 
 		private void InitHud(GameObject hero)
