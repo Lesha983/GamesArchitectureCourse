@@ -16,5 +16,6 @@ namespace CodeBase.Infrastructure
 		GameObject CreateHero(GameObject at);
 		GameObject CreateHud();
 		public void CleanUp();
+		public void Register(ISavedProgressReader progressReader);
 	}
 }
