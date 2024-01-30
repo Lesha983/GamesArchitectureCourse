@@ -1,9 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.AI;
 using CodeBase.Infrastructure;
-using CodeBase.Infrastructure.Services;
-using System;
 
 namespace CodeBase.Enemy
 {
@@ -16,14 +13,9 @@ namespace CodeBase.Enemy
 
 		private IGameFactory _gameFactory;
 
-		private void Start()
+		public void Constract(Transform heroTransform)
 		{
-			_gameFactory = AllServices.Container.Single<IGameFactory>();
-
-			if (_gameFactory.HeroGameObject != null)
-				InitializeHeroTransform();
-			else
-				_gameFactory.HeroCreated += HeroCreated;
+			_heroTransform = heroTransform;
 		}
 
 		private void Update()
@@ -36,11 +28,5 @@ namespace CodeBase.Enemy
 
 			agent.destination = _heroTransform.position;
 		}
-
-		private void HeroCreated() =>
-			InitializeHeroTransform();
-
-		private void InitializeHeroTransform() =>
-			_heroTransform = _gameFactory.HeroGameObject.transform;
 	}
 }
