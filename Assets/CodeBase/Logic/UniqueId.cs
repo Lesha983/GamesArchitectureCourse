@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CodeBase.Logic
 {
-    public class UniqueId : MonoBehaviour
-    {
-        public string Id;
-    }
+  public class UniqueId : MonoBehaviour
+  {
+    public string Id;
+  }
 }

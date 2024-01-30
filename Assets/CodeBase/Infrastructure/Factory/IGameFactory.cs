@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CodeBase.Hero;
 using CodeBase.Infrastructure.Services;
 using CodeBase.StaticData;
 using UnityEngine;
 
-namespace CodeBase.Infrastructure
+namespace CodeBase.Infrastructure.Factory
 {
-	public interface IGameFactory : IService
-	{
-		public List<ISavedProgressReader> ProgressReaders { get; }
-		public List<ISavedProgress> ProgressWriters { get; }
-
-		GameObject HeroGameObject { get; }
-
-		GameObject CreateHero(GameObject at);
-		GameObject CreateHud();
-		GameObject CreateMonster(MonsterTypeId monsterTypeId, Transform parent);
-		public void CleanUp();
-		public void Register(ISavedProgressReader progressReader);
-	}
+  public interface IGameFactory : IService
+  {
+    GameObject CreateHero(GameObject at);
+    GameObject CreateHud();
+    List<ISavedProgressReader> ProgressReaders { get; }
+    List<ISavedProgress> ProgressWriters { get; }
+    void Register(ISavedProgressReader progressReader);
+    void Cleanup();
+    GameObject CreateMonster(MonsterTypeId typeId, Transform parent);
+  }
 }

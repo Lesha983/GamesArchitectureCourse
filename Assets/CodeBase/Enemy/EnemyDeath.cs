@@ -4,50 +4,48 @@ using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-	[RequireComponent(typeof(EnemyAnimator), typeof(EnemyHealth))]
-	public class EnemyDeath : MonoBehaviour
-	{
-		public EnemyAnimator Animator;
-		public EnemyHealth Health;
+  [RequireComponent(typeof(EnemyHealth), typeof(EnemyAnimator))]
+  public class EnemyDeath : MonoBehaviour
+  {
+    public EnemyHealth Health;
+    public EnemyAnimator Animator;
+    public AgentMoveToHero MoveToHero;
 
-		public GameObject DeathFxPrefab;
+    public GameObject DeathFx;
 
-		public event Action Happened;
+    public event Action Happened;
 
-		private void Start()
-		{
-			Health.HealthChanged += HealthChanged;
-		}
+    private void Start() => 
+      Health.HealthChanged += HealthChanged;
 
-		private void OnDestroy()
-		{
-			Health.HealthChanged -= HealthChanged;
-		}
+    private void OnDestroy() => 
+      Health.HealthChanged -= HealthChanged;
 
-		private void HealthChanged()
-		{
-			if (Health.Current <= 0f)
-				Die();
-		}
+    private void HealthChanged()
+    {
+      if (Health.Current <= 0)
+        Die();
+    }
 
-		private void Die()
-		{
-			Health.HealthChanged -= HealthChanged;
-			Animator.PlayDeath();
-			SpawnDeathFx();
-			Happened?.Invoke();
-			StartCoroutine(nameof(DestroyTimer));
-		}
+    private void Die()
+    {
+      Health.HealthChanged -= HealthChanged;
+      MoveToHero.enabled = false;
+      Animator.PlayDeath();
 
-		private void SpawnDeathFx()
-		{
-			Instantiate(DeathFxPrefab, transform.position, Quaternion.identity);
-		}
+      SpawnDeathFx();
+      StartCoroutine(DestroyTimer());
+      
+      Happened?.Invoke();
+    }
 
-		private IEnumerator DestroyTimer()
-		{
-			yield return new WaitForSeconds(3f);
-			Destroy(gameObject);
-		}
-	}
+    private void SpawnDeathFx() => 
+      Instantiate(DeathFx, transform.position, Quaternion.identity);
+
+    private IEnumerator DestroyTimer()
+    {
+      yield return new WaitForSeconds(3);
+      Destroy(gameObject);
+    }
+  }
 }

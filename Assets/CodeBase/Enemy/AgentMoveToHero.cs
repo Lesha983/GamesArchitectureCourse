@@ -1,32 +1,29 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
-using CodeBase.Infrastructure;
 
 namespace CodeBase.Enemy
 {
-	public class AgentMoveToHero : Follow
-	{
-		[SerializeField] private NavMeshAgent agent;
+  public class AgentMoveToHero : Follow
+  {
+    private const float MinimalDistance = 1f;
 
-		private Transform _heroTransform;
-		private const float minDistance = 1f;
+    public NavMeshAgent Agent;
 
-		private IGameFactory _gameFactory;
+    private Transform _heroTransform;
 
-		public void Constract(Transform heroTransform)
-		{
-			_heroTransform = heroTransform;
-		}
+    public void Construct(Transform heroTransform) =>
+      _heroTransform = heroTransform;
 
-		private void Update()
-		{
-			if (!_heroTransform)
-				return;
+    private void Update() => 
+      SetDestinationForAgent();
 
-			if (Vector3.Distance(agent.transform.position, _heroTransform.position) < minDistance)
-				return;
+    private void SetDestinationForAgent()
+    {
+      if (HeroNotReached())
+        Agent.destination = _heroTransform.position;
+    }
 
-			agent.destination = _heroTransform.position;
-		}
-	}
+    private bool HeroNotReached() =>
+      Vector3.Distance(Agent.transform.position, _heroTransform.position) >= MinimalDistance;
+  }
 }

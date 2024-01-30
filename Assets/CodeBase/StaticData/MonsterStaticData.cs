@@ -1,25 +1,28 @@
+﻿using System;
 using UnityEngine;
 
 namespace CodeBase.StaticData
 {
-    [CreateAssetMenu(menuName = "StaticData/Monster", fileName = "MonsterData")]
-    public class MonsterStaticData : ScriptableObject
-    {
-        public MonsterTypeId MonsterTypeId;
-        
-        [Range(1, 100)]
-        public int Hp;
-        [Range(1f, 30f)]
-        public float Damage;
-        [Range(1f, 15f)]
-        public float MoveSpeed;
+  [CreateAssetMenu(fileName = "MonsterData", menuName = "StaticData/Monster", order = 0)]
+  public class MonsterStaticData : ScriptableObject
+  {
+    public MonsterTypeId MonsterTypeId;
 
-        [Range(0.5f, 1f)]
-        public float Cleavage = 0.5f;
+    [Range(1, 100)] 
+    public int Hp = 50;
 
-        [Range(0.5f, 1f)]
-        public float EffectiveDistance = 0.5f;
+    [Range(1, 30)] 
+    public float Damage = 15;
 
-        public GameObject Prefab;
-    }
+    [Range(0.5f, 1)] 
+    public float EffectiveDistance = 0.75f;
+
+    [Range(0.5f, 1)] 
+    public float Cleavage = 0.75f;
+    
+    [Range(1,10)]
+    public float MoveSpeed = 5;
+    
+    public GameObject Prefab;
+  }
 }

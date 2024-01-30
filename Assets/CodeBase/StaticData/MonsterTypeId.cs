@@ -1,8 +1,8 @@
-namespace CodeBase.StaticData
+﻿namespace CodeBase.StaticData
 {
-    public enum MonsterTypeId
-    {
-        Lich = 0,
-        Golem = 10,
-    }
+  public enum MonsterTypeId
+  {
+    Lich = 0,
+    Golem = 1
+  }
 }

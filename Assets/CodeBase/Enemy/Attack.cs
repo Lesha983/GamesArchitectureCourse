@@ -1,95 +1,94 @@
-using System.Linq;
+﻿using System.Linq;
+using CodeBase.Logic;
 using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-	[RequireComponent(typeof(EnemyAnimator))]
-	public class Attack : MonoBehaviour
-	{
-		[SerializeField] private EnemyAnimator animator;
-		[SerializeField] private float attackCooldown = 3f;
-		[SerializeField] private float cleavage = 0.5f;
-		[SerializeField] private float effectiveDistance = 0.5f;
+  [RequireComponent(typeof(EnemyAnimator))]
+  public class Attack : MonoBehaviour
+  {
+    public EnemyAnimator Animator;
+    
+    public float AttackCooldown = 3f;
+    public float Cleavage = 0.5f;
+    public float EffectiveDistance = 0.5f;
+    public float Damage = 10f;
 
-		public float Damage { get; set; }
-		public float Cleavage { get; set; }
-		public float EffectiveDistance { get; set; }
+    private Transform _heroTransform;
+    private float _attackCooldown;
+    private bool _isAttacking;
+    private int _layerMask;
 
-		private Transform _heroTransform;
-		private float _attackCooldown;
-		private bool _isAttacking;
-		private int _layerMask;
-		private Collider[] _hits = new Collider[1];
-		private Vector3 _offset = new Vector3(0f, 0.5f, 0f);
-		private bool _attackIsActive;
+    private Collider[] _hits = new Collider[1];
 
-		public void DisableAttack() =>
-			_attackIsActive = false;
+    private bool _attackIsActive;
 
-		public void EnableAttack() =>
-			_attackIsActive = true;
+    public void Construct(Transform heroTransform) => 
+      _heroTransform = heroTransform;
 
-		public void Constract(Transform heroTransform) => 
-			_heroTransform = heroTransform;
 
-		private void Awake()
-		{
-			_layerMask = 1 << LayerMask.NameToLayer("Player");
-		}
+    private void Awake() => 
+      _layerMask = 1 << LayerMask.NameToLayer("Player");
 
-		private void Update()
-		{
-			UpdateCooldown();
+    private void Update()
+    {
+      UpdateCooldown();
 
-			if (CanAttack())
-				StartAttack();
-		}
+      if(CanAttack())
+        StartAttack();
+    }
 
-		private void OnAttack()
-		{
-			if (Hit(out Collider hit))
-			{
-				PhysicsDebug.DrawDebug(StartPoint(), cleavage, 1f);
-				hit.transform.GetComponent<Logic.IHealth>().TakeDamage(Damage);
-			}
-		}
+    private void UpdateCooldown()
+    {
+      if (!CooldownIsUp())
+        _attackCooldown -= Time.deltaTime;
+    }
 
-		private void OnAttackEnded()
-		{
-			_attackCooldown = attackCooldown;
-			_isAttacking = false;
-		}
+    private void OnAttack()
+    {
+      if (Hit(out Collider hit))
+      { 
+        PhysicsDebug.DrawDebug(StartPoint(), Cleavage, 1);
+        hit.transform.GetComponent<IHealth>().TakeDamage(Damage);
+      }
+    }
 
-		private bool Hit(out Collider hit)
-		{
-			var hitsCount = Physics.OverlapSphereNonAlloc(StartPoint(), cleavage, _hits, _layerMask);
-			hit = _hits.FirstOrDefault();
+    public void EnableAttack() => 
+      _attackIsActive = true;
 
-			return hitsCount > 0;
-		}
+    public void DisableAttack() => 
+      _attackIsActive = false;
 
-		private Vector3 StartPoint() =>
-			transform.position + _offset + transform.forward * effectiveDistance;
+    private bool Hit(out Collider hit)
+    {
+      int hitsCount = Physics.OverlapSphereNonAlloc(StartPoint(), Cleavage, _hits, _layerMask);
+      
+      hit = _hits.FirstOrDefault();
+      
+      return hitsCount > 0;
+    }
 
-		private void UpdateCooldown()
-		{
-			if (!CooldownIsUp())
-				_attackCooldown -= Time.deltaTime;
-		}
+    private Vector3 StartPoint() =>
+      new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z) + transform.forward*EffectiveDistance;
 
-		private void StartAttack()
-		{
-			transform.LookAt(_heroTransform);
-			animator.PlayAttack();
+    private void OnAttackEnded()
+    {
+      _attackCooldown = AttackCooldown;
+      _isAttacking = false;
+    }
 
-			_isAttacking = true;
-		}
+    private void StartAttack()
+    {
+      transform.LookAt(_heroTransform);
+      Animator.PlayAttack();
 
-		private bool CanAttack() =>
-			_attackIsActive && !_isAttacking && CooldownIsUp();
+      _isAttacking = true;
+    }
 
-		private bool CooldownIsUp() =>
-			_attackCooldown <= 0f;
+    private bool CanAttack() => 
+      _attackIsActive && !_isAttacking && CooldownIsUp();
 
-	}
+    private bool CooldownIsUp() => 
+      _attackCooldown <= 0;
+  }
 }
