@@ -10,18 +10,10 @@ namespace CodeBase.Enemy
 		[SerializeField] private float speed;
 
 		private Transform _heroTransform;
-		private IGameFactory _gameFactory;
 		private Vector3 _positionToLook;
-
-		private void Start()
-		{
-			_gameFactory = AllServices.Container.Single<IGameFactory>();
-
-			if (_gameFactory.HeroGameObject != null)
-				InitializeHeroTransform();
-			else
-				_gameFactory.HeroCreated += InitializeHeroTransform;
-		}
+		
+		public void Constract(Transform heroTransform) => 
+			_heroTransform = heroTransform;
 
 		private void Update()
 		{
@@ -52,8 +44,5 @@ namespace CodeBase.Enemy
 			var positionDiff = _heroTransform.position - transform.position;
 			_positionToLook = new Vector3(positionDiff.x, transform.position.y, positionDiff.z);
 		}
-
-		private void InitializeHeroTransform() =>
-			_heroTransform = _gameFactory.HeroGameObject.transform;
 	}
 }

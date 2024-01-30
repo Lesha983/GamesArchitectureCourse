@@ -1,30 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
+using CodeBase.Enemy;
+using CodeBase.Infrastructure.Services;
+using CodeBase.Logic;
+using CodeBase.StaticData;
+using CodeBase.UI;
 using UnityEngine;
+using UnityEngine.AI;
+using Object = UnityEngine.Object;
 
 namespace CodeBase.Infrastructure
 {
 	public class GameFactory : IGameFactory
 	{
 		private readonly IAssetProvider _assets;
-
-		public event Action HeroCreated;
+		private IStaticDataService _staticData;
 
 		public List<ISavedProgressReader> ProgressReaders { get; } = new();
 		public List<ISavedProgress> ProgressWriters { get; } = new();
 
 		public GameObject HeroGameObject { get; private set; }
 
-		public GameFactory(IAssetProvider assets)
+		public GameFactory(IAssetProvider assets, IStaticDataService staticData)
 		{
 			_assets = assets;
+			_staticData = staticData;
 		}
 
 		public GameObject CreateHero(GameObject at)
 		{
 			HeroGameObject = InstantiateRegistered(AssetPath.HeroPath, at.transform.position);
-			HeroCreated?.Invoke();
 			return HeroGameObject;
+		}
+
+		public GameObject CreateMonster(MonsterTypeId typeId, Transform parent)
+		{
+			var monsterData = _staticData.ForMonster(typeId);
+			var monster = Object.Instantiate(monsterData.Prefab, parent.position, Quaternion.identity, parent);
+			
+			var health = monster.GetComponent<IHealth>();
+			health.Current = monsterData.Hp;
+			health.Max = monsterData.Hp;
+			
+			monster.GetComponent<ActorUI>().Constract(health);
+			monster.GetComponent<AgentMoveToHero>().Constract(HeroGameObject.transform);
+			monster.GetComponent<NavMeshAgent>().speed = monsterData.MoveSpeed;
+
+			var attack = monster.GetComponent<Attack>();
+			attack.Constract(HeroGameObject.transform);
+			attack.Damage = monsterData.Damage;
+			attack.Cleavage = monsterData.Cleavage;
+			attack.EffectiveDistance = monsterData.EffectiveDistance;
+			
+			monster.GetComponent<RotateToHero>()?.Constract(HeroGameObject.transform);
+			
+			return monster;
 		}
 
 		public GameObject CreateHud() =>
