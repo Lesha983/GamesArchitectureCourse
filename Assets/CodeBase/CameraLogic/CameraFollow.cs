@@ -1,38 +1,37 @@
-﻿using UnityEngine;
-using System.Collections;
-
-using SF = UnityEngine.SerializeField;
+using System;
+using UnityEngine;
 
 namespace CodeBase.CameraLogic
 {
-	public class CameraFollow : MonoBehaviour
-	{
-		[SF] private float RotationAngleX;
-		[SF] private int Distance;
-		[SF] private float OffsetY;
+  public class CameraFollow : MonoBehaviour
+  {
+    public float RotationAngleX;
+    public int Distance;
+    public float OffsetY;
 
-		[SF] private Transform _following;
+    [SerializeField]
+    private Transform _following;
 
-		private void LateUpdate()
-		{
-			if (_following == null)
-				return;
+    private void LateUpdate()
+    {
+      if (_following == null)
+        return;
 
-			var rotation = Quaternion.Euler(RotationAngleX, 0f, 0f);
+      Quaternion rotation = Quaternion.Euler(RotationAngleX, 0, 0);
+      Vector3 position = rotation * new Vector3(0, 0, -Distance) + FollowingPointPosition();
 
-			var position = rotation * new Vector3(0f, 0f, -Distance) + GetFollowingPointPosition();
+      transform.SetPositionAndRotation(position, rotation);
+    }
 
-			transform.position = position;
-			transform.rotation = rotation;
-		}
+    public void Follow(GameObject following) => 
+      _following = following.transform;
 
-		private Vector3 GetFollowingPointPosition()
-		{
-			Vector3 followingPosition = _following.position;
-			followingPosition.y += OffsetY;
-			return followingPosition;
-		}
-
-		public void Follow(Transform following) => _following = following;
-	}
+    private Vector3 FollowingPointPosition()
+    {
+      Vector3 followingPosition = _following.position;
+      followingPosition.y += OffsetY;
+      
+      return followingPosition;
+    }
+  }
 }

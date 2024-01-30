@@ -3,28 +3,28 @@ using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-	[RequireComponent(typeof(Attack))]
-	public class CheckAttackRange : MonoBehaviour
-	{
-		[SerializeField] private Attack attack;
-		[SerializeField] private TriggerObserver observer;
+  [RequireComponent(typeof(Attack))]
+  public class CheckAttackRange : MonoBehaviour
+  {
+    public Attack Attack;
+    public TriggerObserver TriggerObserver;
 
-		private void Start()
-		{
-			observer.TriggerEnter += TriggerEnter;
-			observer.TriggerExit += TriggerExit;
+    private void Start()
+    {
+      TriggerObserver.TriggerEnter += TriggerEnter;
+      TriggerObserver.TriggerExit -= TriggerExit;
 
-			attack.DisableAttack();
-		}
+      Attack.DisableAttack();
+    }
 
-		private void TriggerEnter(Collider collider)
-		{
-			attack.EnableAttack();
-		}
+    private void TriggerEnter(Collider obj)
+    {
+      Attack.EnableAttack();
+    }
 
-		private void TriggerExit(Collider collider)
-		{
-			attack.DisableAttack();
-		}
-	}
+    private void TriggerExit(Collider obj)
+    {
+      Attack.DisableAttack();
+    }
+  }
 }

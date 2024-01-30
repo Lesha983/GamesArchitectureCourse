@@ -1,40 +1,40 @@
 ﻿using System;
-using CodeBase.Infrastructure;
 using UnityEngine;
 
 namespace CodeBase.Hero
 {
-	[RequireComponent(typeof(HeroHealth))]
-	public class HeroDeath : MonoBehaviour
-	{
-		public HeroHealth Health;
-		public HeroMove Move;
-		public HeroAttack Attack;
-		public HeroAnimator Animator;
+  [RequireComponent(typeof(HeroHealth))]
+  public class HeroDeath : MonoBehaviour
+  {
+    public HeroHealth Health;
 
-		public GameObject DeathFxPrefab;
-		private bool _isDead;
+    public HeroMove Move;
+    public HeroAttack Attack;
+    public HeroAnimator Animator;
 
-		private void Start() =>
-			Health.HealthChanged += HealthChanged;
+    public GameObject DeathFx;
+    private bool _isDead;
 
-		private void OnDestroy() =>
-			Health.HealthChanged -= HealthChanged;
+    private void Start() => 
+      Health.HealthChanged += HealthChanged;
 
-		private void HealthChanged()
-		{
-			if (!_isDead && Health.Current <= 0f)
-				Die();
-		}
+    private void OnDestroy() => 
+      Health.HealthChanged -= HealthChanged;
 
-		private void Die()
-		{
-			_isDead = true;
-			Move.enabled = false;
-			Attack.enabled = false;
-			Animator.PlayDeath();
+    private void HealthChanged()
+    {
+      if (!_isDead && Health.Current <= 0f)
+        Die();
+    }
 
-			Instantiate(DeathFxPrefab, transform.position, Quaternion.identity);
-		}
-	}
+    private void Die()
+    {
+      _isDead = true;
+      Move.enabled = false;
+      Attack.enabled = false;
+      Animator.PlayDeath();
+
+      Instantiate(DeathFx, transform.position, Quaternion.identity);
+    }
+  }
 }

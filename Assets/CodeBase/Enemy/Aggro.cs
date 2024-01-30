@@ -1,59 +1,64 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-	public class Aggro : MonoBehaviour
-	{
-		[SerializeField] private TriggerObserver observer;
-		[SerializeField] private Follow follow;
-		[SerializeField] private float cooldown = 3f;
-		private bool _hasAggroTarget;
+  public class Aggro : MonoBehaviour
+  {
+    public TriggerObserver TriggerObserver;
+    public Follow Follow;
 
-		private void Start()
-		{
-			observer.TriggerEnter += TriggerEnter;
-			observer.TriggerExit += TriggerExit;
+    public float Cooldown;
+    
+    private Coroutine _aggroCorountine;
+    private bool _hasAggroTarget;
 
-			SwitchFollowOff();
-		}
+    private void Start()
+    {
+      TriggerObserver.TriggerEnter += TriggerEnter;
+      TriggerObserver.TriggerExit += TriggerExit;
 
-		private void OnDisable()
-		{
-			observer.TriggerEnter -= TriggerEnter;
-			observer.TriggerExit -= TriggerExit;
-		}
+      SwitchFollowOff();
+    }
 
-		private void TriggerEnter(Collider collider)
-		{
-			if (_hasAggroTarget)
-				return;
+    private void TriggerEnter(Collider obj)
+    {
+      if (!_hasAggroTarget)
+      {
+        _hasAggroTarget = true;
+        StopAggroCoroutine();
+        SwitchFollowOn();
+      }
+    }
 
-			_hasAggroTarget = true;
-			StopCoroutine(nameof(AutoSwitchFollow));
-			SwitchFollowOn();
-		}
+    private void TriggerExit(Collider obj)
+    {
+      if (_hasAggroTarget)
+      {
+        _hasAggroTarget = false;
+        _aggroCorountine = StartCoroutine(SwithcFollowOffAfterCooldown());
+      }
+    }
 
-		private void TriggerExit(Collider collider)
-		{
-			if (!_hasAggroTarget)
-				return;
+    private IEnumerator SwithcFollowOffAfterCooldown()
+    {
+      yield return new WaitForSeconds(Cooldown);
+      SwitchFollowOff();
+    }
 
-			_hasAggroTarget = false;
-			StartCoroutine(nameof(AutoSwitchFollow));
-		}
+    private void StopAggroCoroutine()
+    {
+      if (_aggroCorountine != null)
+      {
+        StopCoroutine(_aggroCorountine);
+        _aggroCorountine = null;
+      }
+    }
 
-		private IEnumerator AutoSwitchFollow()
-		{
-			yield return new WaitForSeconds(cooldown);
-			SwitchFollowOff();
-		}
+    private void SwitchFollowOn() => 
+      Follow.enabled = true;
 
-		private void SwitchFollowOn() =>
-			follow.enabled = true;
-
-		private void SwitchFollowOff() =>
-			follow.enabled = false;
-	}
+    private void SwitchFollowOff() => 
+      Follow.enabled = false;
+  }
 }

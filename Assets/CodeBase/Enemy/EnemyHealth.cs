@@ -1,37 +1,43 @@
 ﻿using System;
 using CodeBase.Logic;
-using CodeBase.UI;
 using UnityEngine;
 
 namespace CodeBase.Enemy
 {
-	[RequireComponent(typeof(EnemyAnimator))]
-	public class EnemyHealth : MonoBehaviour, IHealth
-	{
-		public EnemyAnimator Animator;
+  [RequireComponent(typeof(EnemyAnimator))]
+  public class EnemyHealth : MonoBehaviour, IHealth
+  {
+    public EnemyAnimator Animator;
 
-		[SerializeField]
-		private float current;
-		[SerializeField]
-		private float max;
+    [SerializeField] 
+    private float _current;
 
-		public float Current { get => current; set => current = value; }
-		public float Max { get => max; set => max = value; }
+    [SerializeField] 
+    private float _max;
 
-		public event Action HealthChanged;
+    public event Action HealthChanged;
 
-		public void TakeDamage(float damage)
-		{
-			Current -= damage;
+    public float Current 
+    { 
+      get => _current;
+      set => _current = value;
+    }
 
-			Animator.PlayHit();
+    public float Max
+    {
+      get => _max;
+      set => _max = value;
+    }
 
-			HealthChanged?.Invoke();
-		}
+    public void TakeDamage(float damage)
+    {
+      Current -= damage;
+      
+      Animator.PlayHit();
+      
+      HealthChanged?.Invoke();
+    }
 
-		private void Awake()
-		{
-			GetComponentInChildren<ActorUI>().Constract(this);
-		}
-	}
+
+  }
 }

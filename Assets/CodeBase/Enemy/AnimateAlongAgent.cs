@@ -1,35 +1,27 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace CodeBase.Enemy
 {
-	[RequireComponent(typeof(NavMeshAgent))]
-	[RequireComponent(typeof(EnemyAnimator))]
-	public class AnimateAlongAgent : MonoBehaviour
-	{
-		private NavMeshAgent _agent;
-		private EnemyAnimator _animator;
+  [RequireComponent(typeof(NavMeshAgent))]
+  [RequireComponent(typeof(EnemyAnimator))]
+  public class AnimateAlongAgent : MonoBehaviour
+  {
+    private const float MinimalVelocity = 0.1f;
+    
+    public NavMeshAgent Agent;
+    public EnemyAnimator Animator;
 
-		private const float minimalVelocity = 0.1f;
+    private void Update()
+    {
+      if(ShouldMove())
+        Animator.Move(Agent.velocity.magnitude);
+      else
+        Animator.StopMoving();
+    }
 
-		private void Awake()
-		{
-			_agent = GetComponent<NavMeshAgent>();
-			_animator = GetComponent<EnemyAnimator>();
-		}
-
-		private void Update()
-		{
-			if (ShouldMove())
-				_animator.Move(_agent.velocity.magnitude);
-			else
-				_animator.StopMoving();
-		}
-
-		private bool ShouldMove()
-		{
-			 return _agent.velocity.magnitude > minimalVelocity && _agent.remainingDistance > _agent.radius;
-		}
-	}
+    private bool ShouldMove() => 
+      Agent.velocity.magnitude > MinimalVelocity && Agent.remainingDistance > Agent.radius;
+  }
 }

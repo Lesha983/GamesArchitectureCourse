@@ -1,11 +1,10 @@
 ﻿using CodeBase.Data;
-using CodeBase.Infrastructure.Services;
 
-namespace CodeBase.Infrastructure
+namespace CodeBase.Infrastructure.Services.SaveLoad
 {
-	public interface ISaveLoadService : IService
-	{
-		public void SaveProgress();
-		public PlayerProgress LoadProgress();
-	}
+  public interface ISaveLoadService : IService
+  {
+    void SaveProgress();
+    PlayerProgress LoadProgress();
+  }
 }
