@@ -1,5 +1,8 @@
 using System;
+using CodeBase.Data;
+using CodeBase.Hero;
 using CodeBase.Infrastructure.Factory;
+using CodeBase.Infrastructure.Services;
 using UnityEngine;
 
 namespace CodeBase.Enemy
@@ -8,12 +11,22 @@ namespace CodeBase.Enemy
     {
         public EnemyDeath EnemyDeath;
         private IGameFactory _factory;
-        
-        public void Construct(IGameFactory factory)
+        private IRandomService _random;
+        private int _lootMin;
+        private int _lootMax;
+
+        public void Construct(IGameFactory factory, IRandomService random)
         {
             _factory = factory;
+            _random = random;
         }
-        
+
+        public void SetLoot(int min, int max)
+        {
+            _lootMin = min;
+            _lootMax = max;
+        }
+
         private void OnEnable()
         {
             EnemyDeath.Happened += SpawnLoot;
@@ -26,7 +39,20 @@ namespace CodeBase.Enemy
 
         private void SpawnLoot()
         {
-            // _factory
+            var loot = _factory.CreateLoot();
+            loot.transform.position = transform.position;
+
+            var lootItem = GenerateLoot();
+            
+            loot.Initialize(lootItem);
+        }
+
+        private Loot GenerateLoot()
+        {
+            return new Loot()
+            {
+                Value = _random.Next(_lootMin, _lootMax)
+            };
         }
     }
 }

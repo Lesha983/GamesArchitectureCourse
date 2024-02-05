@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using CodeBase.Data;
 using CodeBase.Enemy;
 using CodeBase.Hero;
 using CodeBase.Infrastructure.AssetManagement;
+using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Logic;
 using CodeBase.StaticData;
 using CodeBase.UI;
@@ -18,11 +21,15 @@ namespace CodeBase.Infrastructure.Factory
 
     private readonly IAssetProvider _assets;
     private readonly IStaticDataService _staticData;
+    private IRandomService _randomService;
+    private IPersistentProgressService _progressService;
 
-    public GameFactory(IAssetProvider assets, IStaticDataService staticData)
+    public GameFactory(IAssetProvider assets, IStaticDataService staticData, IRandomService randomService, IPersistentProgressService progressService)
     {
       _assets = assets;
       _staticData = staticData;
+      _randomService = randomService;
+      _progressService = progressService;
     }
     public GameObject CreateHero(GameObject at)
     {
@@ -30,8 +37,13 @@ namespace CodeBase.Infrastructure.Factory
       return HeroGameObject;
     }
 
-    public GameObject CreateHud() => 
-      InstantiateRegistred(AssetPath.HudPath);
+    public GameObject CreateHud()
+    {
+      var hud = InstantiateRegistred(AssetPath.HudPath);
+      hud.GetComponentInChildren<LootCounter>().Construct(_progressService.Progress.WorldData);
+      
+      return hud;
+    }
 
     public GameObject CreateMonster(MonsterTypeId typeId, Transform parent)
     {
@@ -46,6 +58,10 @@ namespace CodeBase.Infrastructure.Factory
       monster.GetComponent<AgentMoveToHero>().Construct(HeroGameObject.transform);
       monster.GetComponent<NavMeshAgent>().speed = monsterData.MoveSpeed;
 
+      var lootSpawner = monster.GetComponentInChildren<LootSpawner>();
+      lootSpawner.Construct(this, _randomService);
+      lootSpawner.SetLoot(monsterData.MinLoot, monsterData.MaxLoot);
+
       Attack attack = monster.GetComponent<Attack>();
       attack.Construct(HeroGameObject.transform);
       attack.Damage = monsterData.Damage;
@@ -55,6 +71,14 @@ namespace CodeBase.Infrastructure.Factory
       monster.GetComponent<RotateToHero>()?.Construct(HeroGameObject.transform);
       
       return monster;
+    }
+
+    public LootPiece CreateLoot()
+    {
+      var lootPiece = InstantiateRegistred(AssetPath.Loot).GetComponent<LootPiece>();
+      lootPiece.Construct(_progressService.Progress.WorldData);
+      
+      return lootPiece;
     }
 
     public void Register(ISavedProgressReader progressReader)
