@@ -3,6 +3,7 @@ using CodeBase.Enemy;
 using CodeBase.Hero;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Services.SaveLoad;
 using CodeBase.StaticData;
 using UnityEngine;
 
@@ -46,15 +47,14 @@ namespace CodeBase.Logic
     {
       if (enemyDeath!=null) 
         enemyDeath.Happened -= Slay;
+      
       Slain = true;
     }
 
     public void UpdateProgress(PlayerProgress progress)
     {
       if (Slain)
-      {
         progress.KillData.ClearedSpawners.Add(_id);
-      }
     }
   }
 }

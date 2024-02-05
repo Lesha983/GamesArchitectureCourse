@@ -8,6 +8,9 @@ namespace CodeBase.StaticData
   {
     public MonsterTypeId MonsterTypeId;
 
+    public int MaxLoot;
+    public int MinLoot;
+
     [Range(1, 100)] 
     public int Hp = 50;
 
