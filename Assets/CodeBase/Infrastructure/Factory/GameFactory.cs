@@ -5,6 +5,7 @@ using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Services;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Logic;
+using CodeBase.Logic.EnemySpawners;
 using CodeBase.StaticData;
 using CodeBase.UI;
 using UnityEngine;
@@ -83,7 +84,21 @@ namespace CodeBase.Infrastructure.Factory
       return lootPiece;
     }
 
-    public void Register(ISavedProgressReader progressReader)
+    public void CreateSpawner(Vector3 at, string spawnerId, MonsterTypeId monsterTypeId)
+    {
+      var spawner = InstantiateRegistred(AssetPath.Spawner, at).GetComponent<SpawnPoint>();
+      spawner.Construct(this);
+      spawner.Id = spawnerId;
+      spawner.MonsterTypeId = monsterTypeId;
+    }
+
+    public void Cleanup()
+    {
+      ProgressReaders.Clear();
+      ProgressWriters.Clear();
+    }
+
+    private void Register(ISavedProgressReader progressReader)
     {
       if (progressReader is ISavedProgress progressWriter)
       {
@@ -91,12 +106,6 @@ namespace CodeBase.Infrastructure.Factory
       }
       
       ProgressReaders.Add(progressReader);
-    }
-
-    public void Cleanup()
-    {
-      ProgressReaders.Clear();
-      ProgressWriters.Clear();
     }
 
     private GameObject InstantiateRegistred(string prefabPath, Vector3 position)
