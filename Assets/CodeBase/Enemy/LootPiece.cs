@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using CodeBase.Data;
 using TMPro;
@@ -12,8 +11,6 @@ namespace CodeBase.Enemy
         public GameObject PickupFxPrefab;
         public TextMeshPro LootText;
         public GameObject PickupPopup;
-
-        public event Action OnPicked;
         
         private Loot _loot;
         private bool _picked;
@@ -38,7 +35,6 @@ namespace CodeBase.Enemy
                 return;
             
             _picked = true;
-            OnPicked?.Invoke();
 
             UpdateWorldData();
             HideSkull();

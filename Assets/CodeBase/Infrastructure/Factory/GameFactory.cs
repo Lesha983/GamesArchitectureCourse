@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CodeBase.Data;
 using CodeBase.Enemy;
 using CodeBase.Hero;
 using CodeBase.Infrastructure.AssetManagement;
@@ -24,7 +23,10 @@ namespace CodeBase.Infrastructure.Factory
     private IRandomService _randomService;
     private IPersistentProgressService _progressService;
 
-    public GameFactory(IAssetProvider assets, IStaticDataService staticData, IRandomService randomService, IPersistentProgressService progressService)
+    public GameFactory(IAssetProvider assets,
+      IStaticDataService staticData,
+      IRandomService randomService,
+      IPersistentProgressService progressService)
     {
       _assets = assets;
       _staticData = staticData;

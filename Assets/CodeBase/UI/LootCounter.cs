@@ -1,6 +1,4 @@
 using CodeBase.Data;
-using CodeBase.Infrastructure.Services;
-using CodeBase.Infrastructure.Services.SaveLoad;
 using TMPro;
 using UnityEngine;
 
