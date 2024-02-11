@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa97d2dc54f545b2841f51bcb5a18f84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HpBar: {fileID: 893283680976035890}
+  HpBar: {fileID: 8198620746742593700}
 --- !u!1 &2685796065476598059
 GameObject:
   m_ObjectHideFlags: 0
@@ -632,7 +632,7 @@ GameObject:
   - component: {fileID: 2883984325985389884}
   - component: {fileID: 7071061052229517712}
   - component: {fileID: 2052529588925430999}
-  - component: {fileID: 893283680976035890}
+  - component: {fileID: 8198620746742593700}
   m_Layer: 5
   m_Name: HPBar
   m_TagString: Untagged
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &893283680976035890
+--- !u!114 &8198620746742593700
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -708,7 +708,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8055998553081994456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80e423c7757e44b8893ba3400d7e3af8, type: 3}
+  m_Script: {fileID: 11500000, guid: 505b7adf023245c0b8af777f82178979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ImageCurrent: {fileID: 3391608755722534759}
