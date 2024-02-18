@@ -1,17 +1,18 @@
-﻿using CodeBase.CameraLogic;
+﻿using System;
+using CodeBase.CameraLogic;
 using CodeBase.Hero;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Logic;
 using CodeBase.StaticData;
-using CodeBase.UI;
 using CodeBase.UI.Elements;
+using CodeBase.UI.Services.Factory;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace CodeBase.Infrastructure.States
 {
-  public class LoadLevelState : IPayloadedState<string>
+    public class LoadLevelState : IPayloadedState<string>
   {
     private const string InitialPointTag = "InitialPoint";
     private const string EnemySpawnerTag = "EnemySpawner";
@@ -23,19 +24,21 @@ namespace CodeBase.Infrastructure.States
     private readonly IGameFactory _gameFactory;
     private readonly IPersistentProgressService _progressService;
     private IStaticDataService _staticData;
+		private IUIFactory _uiFactory;
 
-    public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, LoadingCurtain curtain, 
-      IGameFactory gameFactory, IPersistentProgressService progressService, IStaticDataService staticData)
-    {
-      _gameStateMachine = gameStateMachine;
-      _sceneLoader = sceneLoader;
-      _curtain = curtain;
-      _gameFactory = gameFactory;
-      _progressService = progressService;
-      _staticData = staticData;
-    }
+		public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, LoadingCurtain curtain,
+	  IGameFactory gameFactory, IPersistentProgressService progressService, IStaticDataService staticData, IUIFactory uiFactory)
+		{
+			_gameStateMachine = gameStateMachine;
+			_sceneLoader = sceneLoader;
+			_curtain = curtain;
+			_gameFactory = gameFactory;
+			_progressService = progressService;
+			_staticData = staticData;
+			_uiFactory = uiFactory;
+		}
 
-    public void Enter(string sceneName)
+		public void Enter(string sceneName)
     {
       _curtain.Show();
       _gameFactory.Cleanup();
@@ -47,6 +50,7 @@ namespace CodeBase.Infrastructure.States
 
     private void OnLoaded()
     {
+      InitUIRoot();
       InitGameWorld();
       InformProgressReaders();
       
@@ -61,7 +65,10 @@ namespace CodeBase.Infrastructure.States
       }
     }
 
-    private void InitGameWorld()
+		private void InitUIRoot() =>
+            _uiFactory.CreateUIRoot();
+
+		private void InitGameWorld()
     {
       InitSpawners();
       

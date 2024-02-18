@@ -230,7 +230,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4867139536071345346}
   - component: {fileID: 8513344423604470273}
-  - component: {fileID: 6055021039339107099}
   m_Layer: 0
   m_Name: Price_container
   m_TagString: Untagged
@@ -285,19 +284,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &6055021039339107099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1819479300122235426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37adfdbc958049379aa146787b716539, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Counter: {fileID: 418816829678262357}
 --- !u!1 &3487852390306640898
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using CodeBase.Infrastructure.AssetManagement;
+using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.StaticData;
 using CodeBase.UI.Services.Windows;
 using UnityEngine;
@@ -13,17 +14,20 @@ namespace CodeBase.UI.Services.Factory
         private IStaticDataService _staticData;
         
         private Transform _uiRoot;
+		private IPersistentProgressService _progressService;
 
-        public UIFactory(IAssetProvider assets, IStaticDataService staticData)
-        {
-            _assets = assets;
-            _staticData = staticData;
-        }
+		public UIFactory(IAssetProvider assets, IStaticDataService staticData, IPersistentProgressService progressService)
+		{
+			_assets = assets;
+			_staticData = staticData;
+			_progressService = progressService;
+		}
 
-        public void CreateShop()
+		public void CreateShop()
         {
             var config = _staticData.ForWindow(WindowId.Shop);
-            Object.Instantiate(config.Prefab, _uiRoot);
+			var window = Object.Instantiate(config.Prefab, _uiRoot);
+            window.Constract(_progressService);
         }
         
         public void CreateUIRoot() => 
