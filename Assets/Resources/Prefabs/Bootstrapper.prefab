@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 721148457585134655}
-  - component: {fileID: 7484789232875260613}
+  - component: {fileID: 8151132511533934609}
   m_Layer: 0
   m_Name: Bootstrapper
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7484789232875260613
+--- !u!114 &8151132511533934609
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8746640406550100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b50f9f3643045329cb7754bc18dec4, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c738308a4f43d14ea2251222615c443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curtainPrefab: {fileID: 6051546979857504465, guid: de41674499b194ecdad61474d446ee6a, type: 3}
+  CurtainPrefab: {fileID: 8713324141352661597, guid: 9999f750a9cb62f4e95f2b25c7f6aec2, type: 3}

@@ -16,7 +16,37 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 265f2aa6ca12745609f4cad1f9f04f2f
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: a3c35ac35c2ecb4449e61ef3d05f7454
+    m_Address: Golem
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a9de9b131dde954498d361c95612603
+    m_Address: Lich
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d587ba2fd38b20449986c007d26d2b8a
+    m_Address: Loot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4346102b516eab548bbd4baf4dca4817
+    m_Address: SpawnPoint
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 181862a89f60d7a459002f9870860ad4
+    m_Address: Hero
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f6395af14c6ae2d4ea00c7e97e633ad3
+    m_Address: Hud
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 4ede4e237ebbf4d138239c08e3baa38d, type: 2}
   m_SchemaSet:
