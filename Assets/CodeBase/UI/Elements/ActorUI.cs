@@ -9,28 +9,29 @@ namespace CodeBase.UI.Elements
 
     private IHealth _health;
 
-    private void OnDestroy()
+    public void Construct(IHealth heroHealth)
     {
-      if (_health != null)
-      {
-        _health.HealthChanged -= UpdateHpBar;
-      }
-    }
-
-    public void Construct(IHealth health)
-    {
-      _health = health;
-      _health.HealthChanged += UpdateHpBar;
+      _health = heroHealth;
+      _health.Changed += UpdateHpBar;
     }
 
     private void Start()
     {
       IHealth health = GetComponent<IHealth>();
+      
       if(health != null)
         Construct(health);
     }
 
-    private void UpdateHpBar() => 
+    private void OnDestroy()
+    {
+      if(_health != null)
+        _health.Changed -= UpdateHpBar;
+    }
+
+    private void UpdateHpBar()
+    {
       HpBar.SetValue(_health.Current, _health.Max);
+    }
   }
 }

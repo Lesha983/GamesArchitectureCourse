@@ -21,9 +21,9 @@ namespace CodeBase.Hero
     public event Action<AnimatorState> StateExited;
    
     public AnimatorState State { get; private set; }
+    public CharacterController CharacterController;
     
     public Animator Animator;
-    public CharacterController CharacterController;
 
     private void Update()
     {

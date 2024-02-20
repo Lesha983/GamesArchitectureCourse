@@ -15,4 +15,4 @@ EditorBuildSettings:
     path: Assets/Scenes/Dungeon.unity
     guid: 114d9f5ea8ed2eb48a0c7b4f6b7655a0
   m_configObjects:
-    com.unity.addressableassets: {fileID: 11400000, guid: 22bb11ae723b949bfb4fbc6fe5f5f967, type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: d65c47cf2a4437e4991f9fb66c32c6c3, type: 2}

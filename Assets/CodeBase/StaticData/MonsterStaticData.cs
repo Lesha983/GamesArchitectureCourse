@@ -1,33 +1,31 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.Serialization;
 
 namespace CodeBase.StaticData
 {
-  [CreateAssetMenu(fileName = "MonsterData", menuName = "StaticData/Monster", order = 0)]
+  [CreateAssetMenu(fileName = "MonsterData", menuName = "StaticData/Monster")]
   public class MonsterStaticData : ScriptableObject
   {
     public MonsterTypeId MonsterTypeId;
-
-    public int MaxLoot;
-    public int MinLoot;
-
-    [Range(1, 100)] 
-    public int Hp = 50;
+    
+    [Range(1, 100)]
+    public int Hp;
+    
+    [Range(1,30)]
+    public float Damage;
 
     [Range(1, 30)] 
-    public float Damage = 15;
+    public float MoveSpeed;
 
-    [Range(0.5f, 1)] 
-    public float EffectiveDistance = 0.75f;
+    [Range(0.5f, 1f)]
+    public float EffectiveDistance;
 
-    [Range(0.5f, 1)] 
-    public float Cleavage = 0.75f;
-    
-    [Range(1,10)]
-    public float MoveSpeed = 5;
-    
+    [Range(0.5f, 1f)]
+    public float Cleavage;
+
+    public int MinLoot;
+    public int MaxLoot;
+
     public AssetReferenceGameObject PrefabReference;
   }
 }

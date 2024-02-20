@@ -11,14 +11,13 @@ namespace CodeBase.Enemy
 
     [SerializeField] 
     private float _current;
-
     [SerializeField] 
     private float _max;
 
-    public event Action HealthChanged;
+    public event Action Changed;
 
-    public float Current 
-    { 
+    public float Current
+    {
       get => _current;
       set => _current = value;
     }
@@ -32,12 +31,9 @@ namespace CodeBase.Enemy
     public void TakeDamage(float damage)
     {
       Current -= damage;
-      
       Animator.PlayHit();
       
-      HealthChanged?.Invoke();
+      Changed?.Invoke();
     }
-
-
   }
 }

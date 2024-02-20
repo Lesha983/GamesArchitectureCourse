@@ -6,75 +6,73 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace CodeBase.Infrastructure.AssetManagement
 {
-  public class AssetProvider : IAssetProvider
+  public class AssetProvider : IAssets
   {
-    private readonly Dictionary<string, AsyncOperationHandle> _completedCache = new();
-    private readonly Dictionary<string, List<AsyncOperationHandle>> _handles = new();
+    private readonly Dictionary<string, AsyncOperationHandle> _completedCache =
+      new Dictionary<string, AsyncOperationHandle>();
+
+    private readonly Dictionary<string, List<AsyncOperationHandle>> _handles =
+      new Dictionary<string, List<AsyncOperationHandle>>();
 
     public void Initialize() => 
       Addressables.InitializeAsync();
 
     public async Task<T> Load<T>(AssetReference assetReference) where T : class
     {
-      if (_completedCache.TryGetValue(assetReference.AssetGUID, out var completedHandle))
+      if (_completedCache.TryGetValue(assetReference.AssetGUID, out AsyncOperationHandle completedHandle))
         return completedHandle.Result as T;
 
       return await RunWithCacheOnComplete(
         Addressables.LoadAssetAsync<T>(assetReference),
-        assetReference.AssetGUID);
+        cacheKey: assetReference.AssetGUID);
     }
 
     public async Task<T> Load<T>(string address) where T : class
     {
-      if (_completedCache.TryGetValue(address, out var completedHandle))
+      if (_completedCache.TryGetValue(address, out AsyncOperationHandle completedHandle))
         return completedHandle.Result as T;
-      
+
       return await RunWithCacheOnComplete(
-        Addressables.LoadAssetAsync<T>(address), address);
+        Addressables.LoadAssetAsync<T>(address),
+        address);
     }
+    
+    
+    public Task<GameObject> Instantiate(string address) => 
+      Addressables.InstantiateAsync(address).Task;
 
-    public GameObject Instantiate(string path)
-    {
-      GameObject heroPrefab = Resources.Load<GameObject>(path);
-      return Object.Instantiate(heroPrefab);
-    }
 
-    public GameObject Instantiate(string path, Vector3 spawnPoint)
+    public Task<GameObject> Instantiate(string address, Vector3 at) => 
+      Addressables.InstantiateAsync(address, at, Quaternion.identity).Task;
+
+    public void CleanUp()
     {
-      GameObject heroPrefab = Resources.Load<GameObject>(path);
-      return Object.Instantiate(heroPrefab, spawnPoint, Quaternion.identity);
+      foreach (var resourceHandles in _handles.Values)
+      foreach (var handle in resourceHandles)
+        Addressables.Release(handle);
+      
+      _completedCache.Clear();
+      _handles.Clear();
     }
 
     private async Task<T> RunWithCacheOnComplete<T>(AsyncOperationHandle<T> handle, string cacheKey) where T : class
     {
-      handle.Completed += completeHandle =>
-      {
-        _completedCache[cacheKey] = completeHandle;
-      };
+      handle.Completed += compleHandle => { _completedCache[cacheKey] = compleHandle; };
 
       AddHandle(cacheKey, handle);
 
       return await handle.Task;
     }
 
-    public void CleanUp()
-    {
-      foreach (var resourceHandles in _handles.Values)
-      foreach (var handle in resourceHandles) 
-          Addressables.Release(handle);
-      
-      _completedCache.Clear();
-      _handles.Clear();
-    }
-
     private void AddHandle<T>(string key, AsyncOperationHandle<T> handle) where T : class
     {
-      if (!_handles.TryGetValue(key, out var resourceHandles))
+      if (!_handles.TryGetValue(key, out List<AsyncOperationHandle> resourceHandle))
       {
-        resourceHandles = new List<AsyncOperationHandle>();
-        _handles[key] = resourceHandles;
+        resourceHandle = new List<AsyncOperationHandle>();
+        _handles[key] = resourceHandle;
       }
-      resourceHandles.Add(handle);
+
+      resourceHandle.Add(handle);
     }
   }
 }

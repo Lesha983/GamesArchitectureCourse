@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &256233501945411619
+--- !u!1 &6963848533938312091
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 256233501945411629}
-  - component: {fileID: 256233501945411628}
+  - component: {fileID: 6963848533938312089}
+  - component: {fileID: 6963848533938312088}
   m_Layer: 0
   m_Name: GameBootstrapper
   m_TagString: Untagged
@@ -17,13 +17,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &256233501945411629
+--- !u!4 &6963848533938312089
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256233501945411619}
+  m_GameObject: {fileID: 6963848533938312091}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,17 +31,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &256233501945411628
+--- !u!114 &6963848533938312088
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256233501945411619}
+  m_GameObject: {fileID: 6963848533938312091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c738308a4f43d14ea2251222615c443, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b5e21ee9d1751c46822fc2f245de73b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurtainPrefab: {fileID: 8713324141352661597, guid: 9999f750a9cb62f4e95f2b25c7f6aec2,
+  CurtainPrefab: {fileID: 5626158098293608017, guid: 02e9a8ba97633194ebefa66a2a484bcd,
     type: 3}

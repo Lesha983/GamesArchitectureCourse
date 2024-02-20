@@ -1,5 +1,6 @@
 ﻿using System;
 using CodeBase.Data;
+using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Logic;
 using UnityEngine;
 
@@ -11,31 +12,32 @@ namespace CodeBase.Hero
     public HeroAnimator Animator;
     private State _state;
 
-    public event Action HealthChanged;
+    public event Action Changed;
 
     public float Current
     {
-      get => _state.CurrentHP;
+      get => _state.MaxHP;
       set
       {
         if (_state.CurrentHP != value)
         {
-          _state.CurrentHP = value;
-          HealthChanged?.Invoke();
+          _state.MaxHP = value;
+          Changed?.Invoke();
         }
       }
     }
 
-    public float Max 
-    { 
-      get => _state.MaxHP;
-      set => _state.MaxHP = value;
+    public float Max
+    {
+      get => _state.CurrentHP;
+      set => _state.CurrentHP = value;
     }
+
 
     public void LoadProgress(PlayerProgress progress)
     {
       _state = progress.HeroState;
-      HealthChanged?.Invoke();
+      Changed?.Invoke();
     }
 
     public void UpdateProgress(PlayerProgress progress)
@@ -46,9 +48,9 @@ namespace CodeBase.Hero
 
     public void TakeDamage(float damage)
     {
-      if(Current <= 0)
+      if (Current <= 0)
         return;
-      
+
       Current -= damage;
       Animator.PlayHit();
     }

@@ -1,23 +1,24 @@
-﻿using System;
-using CodeBase.UI.Services.Windows;
+﻿using CodeBase.UI.Services.Windows;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace CodeBase.UI.Elements
 {
-	public class OpenWindowButton : MonoBehaviour
-	{
-		public Button button;
-		public WindowId windowId;
-		private IWindowService _windowService;
+  public class OpenWindowButton : MonoBehaviour
+  {
+    public Button Button;
+    public WindowId WindowId;
+    private IWindowsService _windowService;
 
-		public void Construct(IWindowService windowService) =>
-			_windowService = windowService;
+    public void Construct(IWindowsService windowsService) =>
+      _windowService = windowsService;
 
-		private void Awake() =>
-			button.onClick.AddListener(Open);
+    private void Awake() =>
+      Button.onClick.AddListener(Open);
 
-		private void Open() =>
-			_windowService.Open(windowId);
-	}
+    private void Open()
+    {
+      _windowService.Open(WindowId);
+    }
+  }
 }

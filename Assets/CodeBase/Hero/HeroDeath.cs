@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CodeBase.Hero
 {
   [RequireComponent(typeof(HeroHealth))]
   public class HeroDeath : MonoBehaviour
   {
-    public HeroHealth Health;
+    public HeroHealth heroHealth;
 
     public HeroMove Move;
     public HeroAttack Attack;
@@ -15,15 +14,15 @@ namespace CodeBase.Hero
     public GameObject DeathFx;
     private bool _isDead;
 
-    private void Start() => 
-      Health.HealthChanged += HealthChanged;
 
-    private void OnDestroy() => 
-      Health.HealthChanged -= HealthChanged;
+    private void Start() =>
+      heroHealth.Changed += HeroHealthChanged;
 
-    private void HealthChanged()
+    private void OnDestroy() => heroHealth.Changed -= HeroHealthChanged;
+
+    private void HeroHealthChanged()
     {
-      if (!_isDead && Health.Current <= 0f)
+      if (!_isDead && heroHealth.Current <= 0)
         Die();
     }
 

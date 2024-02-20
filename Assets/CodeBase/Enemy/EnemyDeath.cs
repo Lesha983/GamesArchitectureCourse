@@ -9,17 +9,16 @@ namespace CodeBase.Enemy
   {
     public EnemyHealth Health;
     public EnemyAnimator Animator;
-    public AgentMoveToHero MoveToHero;
 
     public GameObject DeathFx;
 
     public event Action Happened;
 
-    private void Start() => 
-      Health.HealthChanged += HealthChanged;
+    private void Start() =>
+      Health.Changed += HealthChanged;
 
-    private void OnDestroy() => 
-      Health.HealthChanged -= HealthChanged;
+    private void OnDestroy() =>
+      Health.Changed -= HealthChanged;
 
     private void HealthChanged()
     {
@@ -29,23 +28,23 @@ namespace CodeBase.Enemy
 
     private void Die()
     {
-      Health.HealthChanged -= HealthChanged;
-      MoveToHero.enabled = false;
+      Health.Changed -= HealthChanged;
       Animator.PlayDeath();
 
       SpawnDeathFx();
       StartCoroutine(DestroyTimer());
-      
       Happened?.Invoke();
     }
 
-    private void SpawnDeathFx() => 
-      Instantiate(DeathFx, transform.position, Quaternion.identity);
-
     private IEnumerator DestroyTimer()
     {
-      yield return new WaitForSeconds(3);
+      yield return new WaitForSeconds(3f);
       Destroy(gameObject);
+    }
+
+    private void SpawnDeathFx()
+    {
+      Instantiate(DeathFx, transform.position, Quaternion.identity);
     }
   }
 }

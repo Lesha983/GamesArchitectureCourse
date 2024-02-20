@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 namespace CodeBase.Enemy
@@ -9,19 +8,20 @@ namespace CodeBase.Enemy
   public class AnimateAlongAgent : MonoBehaviour
   {
     private const float MinimalVelocity = 0.1f;
-    
     public NavMeshAgent Agent;
     public EnemyAnimator Animator;
 
     private void Update()
     {
-      if(ShouldMove())
+      if (ShouldMove())
         Animator.Move(Agent.velocity.magnitude);
       else
+      {
         Animator.StopMoving();
+      }
     }
 
-    private bool ShouldMove() => 
+    private bool ShouldMove() =>
       Agent.velocity.magnitude > MinimalVelocity && Agent.remainingDistance > Agent.radius;
   }
 }
