@@ -1,7 +1,9 @@
-﻿using CodeBase.Data;
+﻿using System.Collections;
+using System.Threading.Tasks;
+using CodeBase.Data;
 using CodeBase.Enemy;
-using CodeBase.Hero;
 using CodeBase.Infrastructure.Factory;
+using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.StaticData;
 using UnityEngine;
 
@@ -9,45 +11,62 @@ namespace CodeBase.Logic.EnemySpawners
 {
   public class SpawnPoint : MonoBehaviour, ISavedProgress
   {
-    public MonsterTypeId MonsterTypeId;
     public string Id { get; set; }
-
+    public MonsterTypeId MonsterTypeId;
     public bool Slain;
-    
-    private string _id;
+
     private IGameFactory _factory;
-    private EnemyDeath enemyDeath;
+    private EnemyDeath _enemyDeath;
 
-    public void Construct(IGameFactory gameFactory) => 
-      _factory = gameFactory;
+    public void Construct(IGameFactory factory) => _factory = factory;
 
-    public void LoadProgress(PlayerProgress progress)
+    private async void Spawn()
     {
-      if (progress.KillData.ClearedSpawners.Contains(_id))
-        Slain = true;
-      else
-        Spawn();
-    }
-
-    private void Spawn()
-    {
-      GameObject monster = _factory.CreateMonster(MonsterTypeId, transform);
-      enemyDeath = monster.GetComponent<EnemyDeath>();
-      enemyDeath.Happened += Slay;
+      GameObject monster = await _factory.CreateMonster(MonsterTypeId, transform, this);
+      _enemyDeath = monster.GetComponent<EnemyDeath>();
+      _enemyDeath.Happened += Slay;
     }
 
     private void Slay()
     {
-      if (enemyDeath!=null) 
-        enemyDeath.Happened -= Slay;
+      if (_enemyDeath != null) 
+        _enemyDeath.Happened -= Slay;
       
       Slain = true;
+    }
+
+    private async void SpawnLoot(PlayerProgress progress)
+    {
+
+      var lootData = progress.WorldData.LootData.NotCollectedLoot.Find(x => x.Id == Id);
+      
+      if (lootData != null)
+      {
+        LootPiece loot = await _factory.CreateLoot();
+        loot.transform.position = lootData.Position.AsUnityVector();
+        loot.Initialize(lootData.Loot, this);
+      }
+    }
+
+    public void LoadProgress(PlayerProgress progress)
+    {
+      if (progress.KillData.ClearedSpawners.Contains(Id))
+      {
+        Slain = true;
+
+        SpawnLoot(progress);
+      }
+      else
+      {
+        Spawn();
+      }
+
     }
 
     public void UpdateProgress(PlayerProgress progress)
     {
       if (Slain)
-        progress.KillData.ClearedSpawners.Add(_id);
+        progress.KillData.ClearedSpawners.Add(Id);
     }
   }
 }

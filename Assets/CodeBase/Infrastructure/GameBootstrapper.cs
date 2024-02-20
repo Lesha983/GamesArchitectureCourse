@@ -14,7 +14,7 @@ namespace CodeBase.Infrastructure
     {
       _game = new Game(this, Instantiate(CurtainPrefab));
       _game.StateMachine.Enter<BootstrapState>();
-
+      
       DontDestroyOnLoad(this);
     }
   }

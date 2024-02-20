@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CodeBase.Enemy;
-using CodeBase.Hero;
 using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Services.PersistentProgress;
+using CodeBase.Logic.EnemySpawners;
 using CodeBase.StaticData;
 using UnityEngine;
 
@@ -11,12 +13,13 @@ namespace CodeBase.Infrastructure.Factory
   {
     List<ISavedProgressReader> ProgressReaders { get; }
     List<ISavedProgress> ProgressWriters { get; }
-    
-    GameObject CreateHero(GameObject at);
-    GameObject CreateHud();
-    GameObject CreateMonster(MonsterTypeId typeId, Transform parent);
-    void CreateSpawner(Vector3 at, string spawnerId, MonsterTypeId monsterTypeId);
-    LootPiece CreateLoot();
-    void Cleanup();
+
+    Task<GameObject> CreateHero(Vector3 at);
+    Task<GameObject> CreateHud();
+    void CleanUp();
+    Task CreateSpawner(Vector3 at, string spawnerId, MonsterTypeId monsterId);
+    Task<GameObject> CreateMonster(MonsterTypeId typeId, Transform parent, SpawnPoint spawner);
+    Task<LootPiece> CreateLoot();
+    Task WarmUp();
   }
 }

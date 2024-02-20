@@ -1,5 +1,4 @@
-﻿using System;
-using CodeBase.Data;
+﻿using CodeBase.Data;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Infrastructure.Services.SaveLoad;
 
@@ -7,26 +6,25 @@ namespace CodeBase.Infrastructure.States
 {
   public class LoadProgressState : IState
   {
-    private readonly GameStateMachine _stateMachine;
+    private readonly GameStateMachine _gameStateMachine;
     private readonly IPersistentProgressService _progressService;
-    private ISaveLoadService _saveLoadService;
+    private readonly ISaveLoadService _saveLoadService;
 
-    public LoadProgressState(GameStateMachine stateMachine, IPersistentProgressService progressService, ISaveLoadService saveLoadService)
+    public LoadProgressState(GameStateMachine gameStateMachine, IPersistentProgressService progressService, ISaveLoadService saveLoadService)
     {
-      _stateMachine = stateMachine;
+      _gameStateMachine = gameStateMachine;
       _progressService = progressService;
       _saveLoadService = saveLoadService;
     }
-    
+
     public void Enter()
     {
       LoadProgressOrInitNew();
-      _stateMachine.Enter<LoadLevelState, string>(_progressService.Progress.WorldData.PositionOnLevel.Level);
+      _gameStateMachine.Enter<LoadLevelState, string>(_progressService.Progress.WorldData.PositionOnLevel.Level);
     }
 
     public void Exit()
     {
-      
     }
 
     private void LoadProgressOrInitNew()
@@ -36,11 +34,13 @@ namespace CodeBase.Infrastructure.States
 
     private PlayerProgress NewProgress()
     {
-      PlayerProgress progress = new PlayerProgress("Main");
-      progress.HeroState.MaxHP = 50;
-      progress.HeroState.ResetHP();
+      var progress = new PlayerProgress("Main");
+
       progress.HeroStats.Damage = 1f;
       progress.HeroStats.DamageRadius = 0.5f;
+      progress.HeroState.MaxHP = 50;
+      progress.HeroState.ResetHP();
+      
       return progress;
     }
   }

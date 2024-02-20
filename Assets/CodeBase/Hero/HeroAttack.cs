@@ -1,8 +1,7 @@
-﻿using System;
-using CodeBase.Data;
+﻿using CodeBase.Data;
 using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Logic;
-using CodeBase.Services.Input;
 using UnityEngine;
 
 namespace CodeBase.Hero
@@ -12,8 +11,9 @@ namespace CodeBase.Hero
   {
     public HeroAnimator HeroAnimator;
     public CharacterController CharacterController;
-    private IInputService _input;
 
+    private IInputService _input;
+    
     private static int _layerMask;
     private Collider[] _hits = new Collider[3];
     private Stats _stats;
@@ -31,6 +31,7 @@ namespace CodeBase.Hero
         HeroAnimator.PlayAttack();
     }
 
+    //Invoked from Animator
     public void OnAttack()
     {
       for (int i = 0; i < Hit(); i++)
@@ -39,9 +40,10 @@ namespace CodeBase.Hero
       }
     }
 
-    public void LoadProgress(PlayerProgress progress) => _stats = progress.HeroStats;
+    public void LoadProgress(PlayerProgress progress) => 
+      _stats = progress.HeroStats;
 
-    private int Hit() => 
+    private int Hit() =>
       Physics.OverlapSphereNonAlloc(StartPoint() + transform.forward, _stats.DamageRadius, _hits, _layerMask);
 
     private Vector3 StartPoint() =>

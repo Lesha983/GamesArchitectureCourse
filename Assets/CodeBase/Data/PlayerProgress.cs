@@ -5,8 +5,8 @@ namespace CodeBase.Data
   [Serializable]
   public class PlayerProgress
   {
-    public WorldData WorldData;
     public State HeroState;
+    public WorldData WorldData;
     public Stats HeroStats;
     public KillData KillData;
 

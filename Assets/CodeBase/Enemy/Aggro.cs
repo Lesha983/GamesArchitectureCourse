@@ -6,11 +6,10 @@ namespace CodeBase.Enemy
   public class Aggro : MonoBehaviour
   {
     public TriggerObserver TriggerObserver;
-    public Follow Follow;
+    public EnemyFollow Follow;
 
     public float Cooldown;
-    
-    private Coroutine _aggroCorountine;
+    private Coroutine _aggroCoroutine;
     private bool _hasAggroTarget;
 
     private void Start()
@@ -36,22 +35,7 @@ namespace CodeBase.Enemy
       if (_hasAggroTarget)
       {
         _hasAggroTarget = false;
-        _aggroCorountine = StartCoroutine(SwithcFollowOffAfterCooldown());
-      }
-    }
-
-    private IEnumerator SwithcFollowOffAfterCooldown()
-    {
-      yield return new WaitForSeconds(Cooldown);
-      SwitchFollowOff();
-    }
-
-    private void StopAggroCoroutine()
-    {
-      if (_aggroCorountine != null)
-      {
-        StopCoroutine(_aggroCorountine);
-        _aggroCorountine = null;
+        _aggroCoroutine = StartCoroutine(SwitchFollowOffAfterCooldown());
       }
     }
 
@@ -60,5 +44,20 @@ namespace CodeBase.Enemy
 
     private void SwitchFollowOff() => 
       Follow.enabled = false;
+
+    private void StopAggroCoroutine()
+    {
+      if (_aggroCoroutine != null)
+      {
+        StopCoroutine(_aggroCoroutine);
+        _aggroCoroutine = null;
+      }
+    }
+
+    private IEnumerator SwitchFollowOffAfterCooldown()
+    {
+      yield return new WaitForSeconds(Cooldown);
+      SwitchFollowOff();
+    }
   }
 }
