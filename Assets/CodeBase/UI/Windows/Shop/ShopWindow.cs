@@ -1,4 +1,6 @@
-﻿using CodeBase.Infrastructure.Services.PersistentProgress;
+﻿using CodeBase.Infrastructure.AssetManagement;
+using CodeBase.Infrastructure.Services.IAP;
+using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Services.Ads;
 using TMPro;
 
@@ -8,22 +10,30 @@ namespace CodeBase.UI.Windows.Shop
   {
     public TextMeshProUGUI SkullText;
     public RewardedAdItem AdItem;
+    public ShopItemsContainer ShopItems;
 
-    public void Construct(IAdsService adsService, IPersistentProgressService progressService)
+    public void Construct(
+      IAdsService adsService,
+      IPersistentProgressService progressService,
+      IIAPService iapService,
+      IAssets assets)
     {
       base.Construct(progressService);
       AdItem.Construct(adsService, progressService);
+      ShopItems.Construct(iapService, progressService, assets);
     }
 
     protected override void Initialize()
     {
       AdItem.Initialize();
+      ShopItems.Initialize();
       RefreshSkullText();
     }
 
     protected override void SubscribeUpdates()
     {
       AdItem.Subscribe();
+      ShopItems.Subscribe();
       Progress.WorldData.LootData.Changed += RefreshSkullText;
     }
 
@@ -31,6 +41,7 @@ namespace CodeBase.UI.Windows.Shop
     {
       base.CleanUp();
       AdItem.CleanUp();
+      ShopItems.CleanUp();
       Progress.WorldData.LootData.Changed -= RefreshSkullText;
     }
 

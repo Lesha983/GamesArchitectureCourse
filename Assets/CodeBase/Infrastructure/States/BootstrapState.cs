@@ -1,6 +1,7 @@
 ﻿using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services;
+using CodeBase.Infrastructure.Services.IAP;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Infrastructure.Services.Random;
 using CodeBase.Infrastructure.Services.SaveLoad;
@@ -33,10 +34,7 @@ namespace CodeBase.Infrastructure.States
       _sceneLoader.Load(Initial, onLoaded: EnterLoadLevel);
     }
 
-    public void Exit()
-    {
-      
-    }
+    public void Exit() {}
 
     private void EnterLoadLevel() => 
       _stateMachine.Enter<LoadProgressState>();
@@ -52,14 +50,16 @@ namespace CodeBase.Infrastructure.States
       RegisterAdsService();
 
       _services.RegisterSingle<IRandomService>(new UnityRandomService());
-
       _services.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
+      
+      RegisterIAPService(new IAPProvider(), _services.Single<IPersistentProgressService>());
 
       _services.RegisterSingle<IUIFactory>(new UIFactory(
         _services.Single<IAssets>(),
         _services.Single<IStaticDataService>(),
         _services.Single<IPersistentProgressService>(),
-        _services.Single<IAdsService>()
+        _services.Single<IAdsService>(),
+        _services.Single<IIAPService>()
         ));
 
       _services.RegisterSingle<IWindowsService>(new WindowsService(_services.Single<IUIFactory>()));
@@ -88,6 +88,12 @@ namespace CodeBase.Infrastructure.States
       var adsService = new AdsService();
       adsService.Initialize();
       _services.RegisterSingle<IAdsService>(adsService);
+    }
+    private void RegisterIAPService(IAPProvider iapProvider, IPersistentProgressService progressService)
+    {
+      var iapService = new IAPService(iapProvider, progressService);
+      iapService.Initialize();
+      _services.RegisterSingle<IIAPService>(iapService);
     }
 
     private void RegisterStaticData()
